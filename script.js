@@ -1,22 +1,31 @@
-const mazeLayout = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 1, 0, 1],
-    [1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
-    [1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-    [1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-    [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+const levels = [
+    [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+        [1, 0, 1, 0, 1, 0, 1, 1, 0, 1],
+        [1, 0, 1, 0, 0, 0, 0, 1, 0, 1],
+        [1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+        [1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+        [1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ],
+    // Additional levels can be added here
 ];
 
-const player = { x: 1, y: 1 };
-const goal = { x: 8, y: 8 };
+let currentLevel = 0;
+let player = { x: 1, y: 1 };
+let goal = { x: 8, y: 8 };
+let score = 0;
+let timer = 0;
+let interval;
 
 function createMaze() {
     const maze = document.getElementById("maze");
     maze.innerHTML = ""; // Clear the maze content before rendering
+    const mazeLayout = levels[currentLevel];
+
     for (let row = 0; row < mazeLayout.length; row++) {
         for (let col = 0; col < mazeLayout[row].length; col++) {
             const cell = document.createElement("div");
@@ -37,6 +46,8 @@ function createMaze() {
 
 function movePlayer(event) {
     const { x, y } = player;
+    const mazeLayout = levels[currentLevel];
+
     switch (event.key) {
         case "ArrowUp":
             if (mazeLayout[y - 1][x] === 0) player.y--;
@@ -57,13 +68,38 @@ function movePlayer(event) {
 
 function checkGoal() {
     if (player.x === goal.x && player.y === goal.y) {
-        alert("Congratulations! You reached the goal!");
-        player.x = 1;
-        player.y = 1;
-        createMaze();
+        clearInterval(interval);
+        score += Math.max(100 - timer, 0);
+        alert(`Congratulations! You reached the goal!\nTime: ${timer}s\nScore: ${score}`);
+
+        if (currentLevel < levels.length - 1) {
+            currentLevel++;
+            player = { x: 1, y: 1 };
+            startLevel();
+        } else {
+            alert(`You've completed all levels! Final Score: ${score}`);
+            resetGame();
+        }
     }
+}
+
+function startLevel() {
+    document.getElementById("level").innerText = `Level: ${currentLevel + 1}`;
+    timer = 0;
+    interval = setInterval(() => {
+        timer++;
+        document.getElementById("timer").innerText = `Time: ${timer}s`;
+    }, 1000);
+    createMaze();
+}
+
+function resetGame() {
+    currentLevel = 0;
+    score = 0;
+    player = { x: 1, y: 1 };
+    startLevel();
 }
 
 document.addEventListener("keydown", movePlayer);
 
-createMaze();
+resetGame();

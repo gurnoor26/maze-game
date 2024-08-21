@@ -5,14 +5,24 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
+    background-image: url('background.jpg');
+    background-size: cover;
+    background-position: center;
+    font-family: 'Arial', sans-serif;
 }
 
 #game-title {
-    color: red;
+    color: #ff4500;
     font-weight: bold;
     margin-bottom: 20px;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+#score-container {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: white;
+    text-shadow: 1px 1px 2px #000000;
 }
 
 #maze-container {
@@ -21,8 +31,9 @@ body {
     align-items: center;
     width: 420px;
     height: 420px;
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.8);
     border: 2px solid #333;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
 }
 
 #maze {
@@ -39,17 +50,23 @@ body {
 }
 
 .wall {
-    background-color: black;
+    background-color: #333;
+    border-radius: 5px;
 }
 
 .path {
-    background-color: white;
+    background-color: #e0e0e0;
+    border-radius: 5px;
 }
 
 .player {
-    background-color: blue;
+    background-color: #1e90ff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 .goal {
-    background-color: green;
+    background-color: #32cd32;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
